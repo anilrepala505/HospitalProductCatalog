@@ -23,7 +23,7 @@ Autofac.Extras.Moq
 ## Setting Up & Execution ##
 1. Clone the repo
    ```sh
-   git clone https://github.com/anilrepala505/HospitalProductCatalogs.git
+   git clone https://github.com/anilrepala505/HospitalProductCatalog.git
    ```
 2. Open command prompt as admin.
 3. Navigate to project folder.
