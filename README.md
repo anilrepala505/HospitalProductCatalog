@@ -37,3 +37,5 @@ Autofac.Extras.Moq
    ```
 6. List of Endpoints for category and product will be displayed with schemas.
 
+## Unit testing ##
+Unit testcases are available in HospitalProductCatalog.Tests folder.
