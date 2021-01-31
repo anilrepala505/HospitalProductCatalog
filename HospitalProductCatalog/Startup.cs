@@ -1,7 +1,12 @@
+using AutoMapper;
+using HospitalProductCatalog.Interfaces;
+using HospitalProductCatalog.Interfaces.Implementation;
+using HospitalProductCatalog.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +30,25 @@ namespace HospitalProductCatalog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "Hospital Product Catalog",
+                    Version = "v2",
+                    Description = "Service to handle hospital product catalog",
+                });
+            });
             services.AddControllers();
+
+            services.AddDbContext<ProductDbContext>(options =>
+            {
+                options.UseInMemoryDatabase(Configuration.GetConnectionString("memory"));
+            });
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +58,10 @@ namespace HospitalProductCatalog
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v2/swagger.json", "Hospital Product Catalog Services"));
 
             app.UseHttpsRedirection();
 
